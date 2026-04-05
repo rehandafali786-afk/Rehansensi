@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #000;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .box {
+      max-width: 400px;
+      margin: auto;
+      background: #222;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      background: red;
+      color: white;
+      cursor: pointer;
+    }
+
+    .item {
+      background: #333;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>🔐 Admin Panel</h2>
+
+<input id="pass" type="password" placeholder="Enter Password">
+<button onclick="login()">Login</button>
+
+<div id="panel" style="display:none;">
+
+<h3>Add Preset</h3>
+
+<input id="name" placeholder="Preset Name">
+<input id="value" placeholder="Sensitivity Value">
+
+<button onclick="save()">Save</button>
+
+<h3>Saved Presets</h3>
+<div id="list"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const PASSWORD = "Rehan@@";
+
+// LOGIN FIX
+function login(){
+  let pass = document.getElementById("pass").value.trim();
+
+  if(pass === PASSWORD){
+    document.getElementById("panel").style.display = "block";
+    alert("Login Successful ✅");
+    load();
+  } else {
+    alert("Wrong Password ❌");
+  }
+}
+
+// SAVE FIX
+function save(){
+  let name = document.getElementById("name").value.trim();
+  let value = document.getElementById("value").value.trim();
+
+  if(name === "" || value === ""){
+    alert("Fill all fields ⚠️");
+    return;
+  }
+
+  let presets = JSON.parse(localStorage.getItem("presets")) || [];
+
+  presets.push({name, value});
+
+  localStorage.setItem("presets", JSON.stringify(presets));
+
+  document.getElementById("name").value = "";
+  document.getElementById("value").value = "";
+
+  load();
+}
+
+// LOAD FIX
+function load(){
+  let presets = JSON.parse(localStorage.getItem("presets")) || [];
+
+  let html = "";
+
+  if(presets.length === 0){
+    html = "<p>No presets yet</p>";
+  }
+
+  presets.forEach((p,i) => {
+    html += `<div class="item">
+      ${p.name} - ${p.value}
+      <button onclick="del(${i})">Delete</button>
+    </div>`;
+  });
+
+  document.getElementById("list").innerHTML = html;
+}
+
+// DELETE FIX
+function del(i){
+  let presets = JSON.parse(localStorage.getItem("presets")) || [];
+  presets.splice(i,1);
+  localStorage.setItem("presets", JSON.stringify(presets));
+  load();
+}
+
+</script>
+
+</body>
+</html>
