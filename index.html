@@ -1,111 +1,424 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Sensitivity App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoleStreet | Shoes for Every Step</title>
   <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --soft: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #f97316;
+      --accent-dark: #ea580c;
+      --ok: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: Arial;
-      background: linear-gradient(135deg,#1e3c72,#2a5298);
-      color: white;
-      text-align: center;
-      padding: 20px;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+      color: var(--text);
+      min-height: 100vh;
     }
 
-    .box {
-      max-width: 400px;
-      margin: auto;
-      background: rgba(255,255,255,0.1);
-      padding: 20px;
-      border-radius: 15px;
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
     }
 
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(2, 6, 23, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .cart-btn {
       border: none;
-      font-size: 16px;
-    }
-
-    button {
-      background: orange;
+      border-radius: 999px;
+      padding: 10px 16px;
       color: white;
+      background: var(--accent);
+      font-weight: 700;
       cursor: pointer;
     }
 
-    #result {
-      margin-top: 15px;
-      text-align: left;
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 54px 0 32px;
     }
 
-    .preset {
-      background: rgba(0,0,0,0.3);
-      padding: 8px;
-      margin-top: 5px;
-      border-radius: 6px;
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      margin-bottom: 20px;
+      max-width: 560px;
+      font-size: 1.04rem;
+      line-height: 1.6;
+    }
+
+    .hero .cta {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .hero-card {
+      background: linear-gradient(145deg, #0b1120, #172033);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .hero-card img {
+      width: 100%;
+      border-radius: 14px;
+      object-fit: cover;
+      aspect-ratio: 4/3;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 18px 0 16px;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text);
+      background: transparent;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      padding-bottom: 40px;
+    }
+
+    .product {
+      background: rgba(17, 24, 39, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .product img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-content {
+      padding: 14px;
+    }
+
+    .tag {
+      color: var(--ok);
+      font-size: 0.84rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .product h3 {
+      margin-bottom: 8px;
+    }
+
+    .product p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      min-height: 40px;
+      margin-bottom: 10px;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .price {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .add {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 12px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .cart-panel {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: min(350px, 92vw);
+      background: #030712;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 16px;
+      display: none;
+      z-index: 30;
+      box-shadow: 0 15px 35px rgba(0,0,0,.45);
+    }
+
+    .cart-panel.open {
+      display: block;
+    }
+
+    .cart-panel h3 {
+      margin-bottom: 10px;
+    }
+
+    .cart-items {
+      max-height: 180px;
+      overflow: auto;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+
+    .checkout {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      background: var(--accent-dark);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    footer {
+      padding: 24px 0 34px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-
 <body>
+  <header>
+    <div class="container nav">
+      <div class="brand">Sole<span>Street</span></div>
+      <button class="cart-btn" id="cartButton">Cart (0)</button>
+    </div>
+  </header>
 
-<div class="box">
-<h2>🔥 Sensitivity Generator</h2>
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1>Find Your Perfect Pair of Shoes</h1>
+        <p>From daily comfort to high-performance sport styles, SoleStreet brings modern design and premium quality to every step.</p>
+        <button class="cta" onclick="window.scrollTo({top: 500, behavior: 'smooth'})">Shop Collection</button>
+      </div>
+      <div class="hero-card">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80" alt="Featured sneakers">
+      </div>
+    </section>
 
-<input id="ram" type="number" placeholder="Enter RAM">
+    <section>
+      <div class="section-head">
+        <h2>Popular Shoes</h2>
+        <div class="filters" id="filters"></div>
+      </div>
+      <div class="products" id="productGrid"></div>
+    </section>
+  </main>
 
-<select id="style">
-  <option value="rusher">Rusher</option>
-  <option value="sniper">Sniper</option>
-  <option value="balanced">Balanced</option>
-</select>
+  <aside class="cart-panel" id="cartPanel">
+    <h3>Your Cart</h3>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="price-row" style="margin-bottom: 12px;">
+      <span>Total</span>
+      <strong id="cartTotal">$0</strong>
+    </div>
+    <button class="checkout" onclick="checkout()">Checkout</button>
+  </aside>
 
-<select id="gyro">
-  <option value="off">Gyro Off</option>
-  <option value="on">Gyro On</option>
-</select>
+  <footer>
+    © 2026 SoleStreet. Built for sneaker lovers.
+  </footer>
 
-<button onclick="generate()">Generate 🚀</button>
+  <script>
+    const products = [
+      { id: 1, name: "Velocity Runner", category: "Running", price: 119, stock: "In Stock", image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=800&q=80", desc: "Breathable mesh with responsive cushioning." },
+      { id: 2, name: "Metro Classic", category: "Lifestyle", price: 89, stock: "In Stock", image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80", desc: "Minimal design for all-day everyday wear." },
+      { id: 3, name: "Court Elite", category: "Basketball", price: 139, stock: "Limited", image: "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?auto=format&fit=crop&w=800&q=80", desc: "High-top support and confident traction." },
+      { id: 4, name: "TrailPro X", category: "Outdoor", price: 129, stock: "In Stock", image: "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=800&q=80", desc: "Durable grip for trails and rough terrain." },
+      { id: 5, name: "Cloud Walk", category: "Lifestyle", price: 99, stock: "In Stock", image: "https://images.unsplash.com/photo-1543508282-6319a3e2621f?auto=format&fit=crop&w=800&q=80", desc: "Soft comfort foam and premium knit upper." },
+      { id: 6, name: "Sprint Neo", category: "Running", price: 109, stock: "Limited", image: "https://images.unsplash.com/photo-1562183241-b937e95585b6?auto=format&fit=crop&w=800&q=80", desc: "Lightweight speed shoe for fast sessions." }
+    ];
 
-<div id="result"></div>
+    const categories = ["All", ...new Set(products.map(p => p.category))];
+    let activeCategory = "All";
+    let cart = [];
 
-<h3>📊 Presets</h3>
-<div id="presets"></div>
+    const grid = document.getElementById("productGrid");
+    const filters = document.getElementById("filters");
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+    const cartPanel = document.getElementById("cartPanel");
+    const cartButton = document.getElementById("cartButton");
 
-</div>
+    function renderFilters() {
+      filters.innerHTML = categories.map(cat => `
+        <button class="filter-btn ${activeCategory === cat ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+      `).join("");
+    }
 
-<script>
-function generate(){
-  let ram = document.getElementById("ram").value;
-  let style = document.getElementById("style").value;
-  let gyro = document.getElementById("gyro").value;
+    function setCategory(category) {
+      activeCategory = category;
+      renderFilters();
+      renderProducts();
+    }
 
-  let general = ram <= 3 ? 90 : ram <= 6 ? 120 : 160;
+    function renderProducts() {
+      const visibleProducts = activeCategory === "All"
+        ? products
+        : products.filter(p => p.category === activeCategory);
 
-  if(style === "rusher") general += 20;
-  if(style === "sniper") general -= 15;
-  if(gyro === "on") general *= 0.8;
+      grid.innerHTML = visibleProducts.map(item => `
+        <article class="product">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="product-content">
+            <span class="tag">${item.stock}</span>
+            <h3>${item.name}</h3>
+            <p>${item.desc}</p>
+            <div class="price-row">
+              <span class="price">$${item.price}</span>
+              <button class="add" onclick="addToCart(${item.id})">Add</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
 
-  document.getElementById("result").innerHTML =
-    "<b>General:</b> " + Math.round(general);
-}
+    function addToCart(id) {
+      const found = cart.find(i => i.id === id);
+      if (found) {
+        found.qty += 1;
+      } else {
+        const item = products.find(p => p.id === id);
+        cart.push({ ...item, qty: 1 });
+      }
+      renderCart();
+    }
 
-function loadPresets(){
-  let presets = JSON.parse(localStorage.getItem("presets")) || [];
+    function renderCart() {
+      if (!cart.length) {
+        cartItems.innerHTML = "<p>Your cart is empty.</p>";
+      } else {
+        cartItems.innerHTML = cart.map(i => `
+          <div class="cart-row">
+            <span>${i.name} x${i.qty}</span>
+            <strong>$${i.price * i.qty}</strong>
+          </div>
+        `).join("");
+      }
 
-  let html = "";
-  presets.forEach(p => {
-    html += `<div class="preset">${p.name} - ${p.value}</div>`;
-  });
+      const count = cart.reduce((acc, i) => acc + i.qty, 0);
+      const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      cartButton.textContent = `Cart (${count})`;
+      cartTotal.textContent = `$${total}`;
+    }
 
-  document.getElementById("presets").innerHTML = html;
-}
+    function checkout() {
+      if (!cart.length) {
+        alert("Your cart is empty.");
+        return;
+      }
+      alert("Thank you! Your order has been placed.");
+      cart = [];
+      renderCart();
+      cartPanel.classList.remove("open");
+    }
 
-loadPresets();
-</script>
+    cartButton.addEventListener("click", () => {
+      cartPanel.classList.toggle("open");
+    });
 
+    renderFilters();
+    renderProducts();
+    renderCart();
+  </script>
 </body>
 </html>
